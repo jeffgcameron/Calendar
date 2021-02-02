@@ -1,42 +1,48 @@
 
 //diplay current time and day in the jumbotron header using moment.js
 var currentDay = document.getElementById("currentDay");
+var hour = (moment().hours());
 var today = moment().format('MMMM Do YYYY, h:mm a');
-console.log(today);
-console.log(typeof today);
-var m = moment();
-console.log(m.toString());
-console.log(m.hour());
-console.log(typeof m.hour());
+var saveBbutton = document.querySelector(".btn");
+var inputAtt = document.querySelectorAll(".input-group");
+
+console.log(currentDay);
+console.log(hour);
 
 currentDay.textContent = today;
 
-var inputAtt = document.querySelectorAll(".input-group");
+function colorCode() {
+    $(".time-block").each(function() {
+        var blockHour = parseInt($(this).attr("id"));
+
+    if(hour < blockHour) {
+        $(this).addClass("future");
+    } else if (hour === blockHour) {
+        $(this).addClass("present");
+    } else {
+        $(this).addClass("past");
+    }
+    })
+}
 
 
-var currentTime = document.querySelectorAll(".input-group-text")
-var time = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
+function storeInput() {
+    userInput = {
+        nineInput: $.trim($("#nine-input").val()),
+        tenInput: $.trim($("#ten-input").val()),
+        elInput: $.trim($("#el-input").val()),
+        twInput: $.trim($("#tw-input").val()),
+        oneInput: $.trim($("#one-input").val()),
+    }
+    window.localStorage.setItem("events", JSON.stringify(userInput));
+}
 
-var nineId = document.getElementById("nine-id")
-
-
-//for the vaiable time if the the actual time is equal to time less than or greater than time[i]
-// for(var i = 0; i < time.length; i++) {
-//          if (time[i] === m.hour()) {
-//             time[i].setAttribute("style", "background-color: red")
-         
-//  }
-//change the color (attributes) of boxes based on the time it is in the jumbotron
-//if the time is less equal to a time box, make it red.
-//if the time is past time time boxes. keep them gray,
-//if the time has yet to reach the time boxs make them green
-//if today.time = , >, or < time boxes then change the color accordingly
-
-//make text input the 
-
-
-
-// var nineInput = window.localStorage.getItem("nine");
+function displayInput(){
+    var input = JSON.parse(window.localStorage.getItem("events"))
+    if (input) {
+        $("#nine-input").html(input.nineText);
+    }
+}
 
 
 
@@ -62,6 +68,13 @@ saveNineButton.addEventListener("click", function() {
     saveNineTask();
 });
 
+
+
+
+
+
+
+
 // var currentHour = moment();
 // var hour = currentHour.get("hour");
 
@@ -79,3 +92,7 @@ saveNineButton.addEventListener("click", function() {
 
 //   for(i = 1; i <= futureRows; i++) 
 //     $("#_" + (hour + i)).addClass("future");
+saveBbutton.click(storeInput());
+colorCode();
+storeInput();
+displayInput();
